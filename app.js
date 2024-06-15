@@ -30,20 +30,20 @@ function displayBooks() {
     }
 
     // Appends all items of the library
-    for(let i = 0; i <= myLibrary.length; i++) {
+    for(let i in myLibrary) {
         let newBook = document.createElement("div")
         let removeBook = document.createElement("button")
-        removeBook.classList = "remove-book"
-        removeBook.textContent = "Remove Book"
+        let read = document.createElement("button")
         let title = document.createElement("p")
-        
-        console.log("My Library: " + myLibrary)
-        console.log("Index: " + myLibrary[i])
-        console.log("And the other: " + myLibrary[i].title)
+        removeBook.classList = "remove-book"
+        read.classList = "read-book"
+        removeBook.textContent = "Remove Book"
+        read.textContent = "Read Book"
 
-        title.textContent = (myLibrary[i].title)
+        title.textContent = ("Title: " + myLibrary[i].title + '\r\n' + "Author: " + myLibrary[i].author + '\r\n' + "Pages: " + myLibrary[i].pages + '\r\n' + "Read Book: " + myLibrary[i].read)
         newBook.appendChild(title)
         newBook.appendChild(removeBook)
+        newBook.appendChild(read)
         newBook.id = myLibrary[i].title
         container.appendChild(newBook)
     }
@@ -59,6 +59,7 @@ btn.addEventListener("click", () => {
     newForm.setAttribute("style", "display: grid;")
 })
 
+// If the new book form is submitted, this function will create it and add it to the DOM
 submit.addEventListener("click", (event) => {
     event.preventDefault()
     let addBook = []
@@ -75,13 +76,30 @@ submit.addEventListener("click", (event) => {
 
 container.addEventListener("click", (event) => {
     let clickArea = event.target
-    for(let item in myLibrary) {
-        if(myLibrary[item].title == clickArea.parentNode.id) {
-            delete myLibrary[item]
-            console.log(myLibrary)
-            break
+    if(clickArea.classList.contains("remove-book")) {
+        for(let item in myLibrary) {
+            if(myLibrary[item].title == clickArea.parentNode.id) {
+                delete myLibrary[item]
+                break
+            }
         }
-    }
+    
+        displayBooks()
+    } else if(clickArea.classList.contains("read-book")) {
+        for(let item in myLibrary) {
+            console.log(myLibrary[item].title)
+            console.log(clickArea.parentNode.id)
+            if(myLibrary[item].title == clickArea.parentNode.id) {
+                switch(myLibrary[item].read) {
+                    case true:
+                        myLibrary[item].read = false
+                        break
+                    case false:
+                        myLibrary[item].read = true
+                }
+            }
+        }
 
-    displayBooks()
+        displayBooks()
+    }
 })

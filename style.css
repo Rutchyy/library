@@ -73,3 +73,7 @@ main > {
     justify-content: center;
     flex-direction: column;
 }
+
+.container p {
+    white-space: pre;
+}
