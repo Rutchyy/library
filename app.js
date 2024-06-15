@@ -4,8 +4,6 @@ const btn = document.querySelector(".add-book")
 const newForm = document.querySelector("#new-book-form")
 const submit = document.querySelector("#create-book")
 
-console.log(newForm)
-
 // Constructs book objects
 function Book(title, author, pages, read) {
     this.title = title
@@ -32,24 +30,58 @@ function displayBooks() {
     }
 
     // Appends all items of the library
-    for(let i = 0; i < myLibrary.length; i++) {
+    for(let i = 0; i <= myLibrary.length; i++) {
         let newBook = document.createElement("div")
-        newBook.textContent = myLibrary[i].title
+        let removeBook = document.createElement("button")
+        removeBook.classList = "remove-book"
+        removeBook.textContent = "Remove Book"
+        let title = document.createElement("p")
+        
+        console.log("My Library: " + myLibrary)
+        console.log("Index: " + myLibrary[i])
+        console.log("And the other: " + myLibrary[i].title)
+
+        title.textContent = (myLibrary[i].title)
+        newBook.appendChild(title)
+        newBook.appendChild(removeBook)
+        newBook.id = myLibrary[i].title
         container.appendChild(newBook)
     }
 }
 
 displayBooks()
 
+const removeBtns = document.querySelector("button.remove-book")
+
 btn.addEventListener("click", () => {
     // Adds form for new library element
-    console.log("You sure clicked me!")
     newForm.removeAttribute("style", "display: hidden;")
     newForm.setAttribute("style", "display: grid;")
 })
 
-const book = submit.addEventListener("click", (event) => {
-    event.preventDefault();
-    let name = newForm.firstChild.firstChild // How do I navigate to the title input?
-    console.log(name)
+submit.addEventListener("click", (event) => {
+    event.preventDefault()
+    let addBook = []
+    document.querySelectorAll('#new-book-form input').forEach(item => {
+        addBook.push(item.value)
+    })
+
+    let added = new Book(addBook[0], addBook[1], Number(addBook[2]), false)
+    myLibrary.push(added)
+    displayBooks()
+    newForm.removeAttribute("style", "display: grid;")
+    newForm.setAttribute("style", "display: hidden;")
+})
+
+container.addEventListener("click", (event) => {
+    let clickArea = event.target
+    for(let item in myLibrary) {
+        if(myLibrary[item].title == clickArea.parentNode.id) {
+            delete myLibrary[item]
+            console.log(myLibrary)
+            break
+        }
+    }
+
+    displayBooks()
 })
